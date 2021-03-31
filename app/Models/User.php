@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class User
+ * @package App\Models
+ * @method \Illuminate\Database\Eloquent\Builder token() token(string $token)
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -20,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'token',
     ];
 
     /**
@@ -30,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'jwt',
     ];
 
     /**
@@ -40,4 +47,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $token
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeToken($query, string $token)
+    {
+        return $query->where('token', $token);
+    }
+
+    /**
+     * Attach posts to user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Attach files to user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }
