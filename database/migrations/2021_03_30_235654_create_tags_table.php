@@ -18,6 +18,9 @@ class CreateTagsTable extends Migration
             $table->string("name");
             $table->foreign("owner_id")->references("id")->on("users");
             $table->timestamps();
+            // Generally unwise to do this since the storage requirements could get unwieldy with an arbitrary length
+            // string. Fortunately, not doing this for performance... although it could help with it
+            $table->unique(['name', 'owner_id']);
         });
     }
 
