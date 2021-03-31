@@ -14,6 +14,180 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->prefix("/users")->group(
+    function() {
+        // get collection (get_all)
+        Route::get(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        );
+
+        // get entity (get_by_id)
+        Route::get(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        );
+
+        // Update
+        Route::post(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Create
+        Route::post(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        );
+    }
+);
+
+Route::middleware('auth:api')->prefix("/files")->group(
+    function() {
+        // get collection (get_all)
+        Route::get(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        );
+
+        // get entity (get_by_id)
+        Route::get(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        );
+
+        // Delete
+        Route::delete(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Create
+        Route::post(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        )->middleware('auth.token');
+    }
+);
+
+Route::middleware('auth:api')->prefix("/tags")->group(
+    function() {
+        // get collection (get_all)
+        Route::get(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        );
+
+        // get entity (get_by_id)
+        Route::get(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        );
+
+        // Update
+        Route::post(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Delete
+        Route::delete(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Create
+        Route::post(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        )->middleware('auth.token');
+    }
+);
+
+Route::middleware('auth:api')->prefix("/posts")->group(
+    function() {
+        // get collection (get_all)
+        Route::get(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        );
+
+        // get entity (get_by_id)
+        Route::get(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        );
+
+        // Update
+        Route::post(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Delete
+        Route::delete(
+            '/{id}',
+            function (Request $request, $id)
+            {
+                //
+            }
+        )->middleware('auth.token');
+
+        // Create
+        Route::post(
+            '/',
+            function (Request $request)
+            {
+                //
+            }
+        )->middleware('auth.token');
+    }
+);
