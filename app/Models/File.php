@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\UuidPrimaryTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

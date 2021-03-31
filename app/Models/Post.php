@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Traits\UuidPrimaryTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
 class Post extends Model
 {
-    use HasFactory, UuidPrimaryTrait;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
