@@ -29,10 +29,19 @@ trait CreatesFile
      * @param Model $user
      * @return File|object
      */
-    protected function makeSingleFileWithRelationships(Model $user): object
+    protected function makeSingleFileWithUser(Model $user): object
     {
         return File::factory()
             ->for(Post::factory()->for($user)->create())
             ->create();
+    }
+
+    /**
+     * @param Post|Model $post
+     * @return File|object
+     */
+    protected function makeSingleFileWithPost(Model $post): object
+    {
+        return File::factory()->for($post)->create();
     }
 }

@@ -24,7 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'token',
+        'jwt',
     ];
 
     /**
@@ -54,7 +54,7 @@ class User extends Authenticatable
      */
     public function scopeToken($query, string $token)
     {
-        return $query->where('token', $token);
+        return $query->where('jwt', $token);
     }
 
     /**

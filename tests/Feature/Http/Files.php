@@ -29,13 +29,13 @@ class Files extends TestCase
      */
     public function test_get_all()
     {
-        $files = $this->makeMultipleFiles();
+        $expected = $this->makeMultipleFiles();
         $response = $this->json("GET",'/api/files');
         $response->assertStatus(200);
         $response->assertJson(
-            function (AssertableJson $json) use ($files)
+            function (AssertableJson $json) use ($expected)
             {
-                $json->where('data', $files);
+                $json->where('data', $expected);
             }
         );
     }
@@ -47,13 +47,15 @@ class Files extends TestCase
      */
     public function test_get_by_id()
     {
-        $file = $this->makeSingleFile();
-        $response = $this->json("GET",'/api/files/' . $file->id);
+        $expected = $this->makeSingleFile();
+        $response = $this->json("GET",'/api/files/' . $expected->id);
         $response->assertStatus(200);
         $response->assertJson(
-            function (AssertableJson $json) use ($file)
+            function (AssertableJson $json) use ($expected)
             {
-                $json->where('data', $file);
+                $json->where('data.id', $expected->id)
+                    ->where('data.url', $expected->url)
+                    ->missing('data.owner');
             }
         );
     }
@@ -74,6 +76,7 @@ class Files extends TestCase
                 $json->has('data.id');
                 $json->where('data.id', 1);
                 $json->where('data.url', $expected->url);
+                $json->missing('data.owner');
             }
         );
     }
@@ -108,7 +111,7 @@ class Files extends TestCase
     public function test_delete()
     {
         $user = $this->makeSingleUser();
-        $file = $this->makeSingleFileWithRelationships($user);
+        $file = $this->makeSingleFileWithUser($user);
         $response = $this->withAuthorizationHeaderByUser($user)->json("DELETE", '/api/files/' . $file->id);
         $response->assertStatus(200);
     }

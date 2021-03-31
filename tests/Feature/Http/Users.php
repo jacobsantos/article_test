@@ -2,12 +2,26 @@
 
 namespace Tests\Feature\Http;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Tests\CreatesPost;
+use Tests\CreatesTag;
+use Tests\CreatesUser;
+use Tests\IncludeAuthorizationHeader;
 use Tests\TestCase;
 
 class Users extends TestCase
 {
+    use WithFaker, RefreshDatabase, CreatesUser, CreatesPost, CreatesTag, IncludeAuthorizationHeader;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->refreshDatabase();
+    }
+
     /**
      * GET /api/users (get_all)
      *
@@ -15,9 +29,15 @@ class Users extends TestCase
      */
     public function test_get_all()
     {
-        $response = $this->get('/api/users');
-
+        $expected = $this->makeMultipleUsers();
+        $response = $this->json("GET",'/api/tags');
         $response->assertStatus(200);
+        $response->assertJson(
+            function (AssertableJson $json) use ($expected)
+            {
+                $json->where('data', $expected);
+            }
+        );
     }
 
     /**
@@ -27,9 +47,18 @@ class Users extends TestCase
      */
     public function test_get_by_id()
     {
-        $response = $this->get('/api/users/1');
-
+        $expected = $this->makeSingleUser();
+        $response = $this->json("GET",'/api/users/' . $expected->id);
         $response->assertStatus(200);
+        $response->assertJson(
+            function (AssertableJson $json) use ($expected)
+            {
+                $json->where('data.id', $expected->id);
+                $json->where('data.email', $expected->email);
+                $json->where('data.name', $expected->name);
+                $json->missing('data.token');
+            }
+        );
     }
 
     /**
@@ -39,8 +68,9 @@ class Users extends TestCase
      */
     public function test_update()
     {
-        $response = $this->get('/api/users/1');
-
+        $user = $this->makeSingleUser();
+        $expected = User::factory()->definition();
+        $response = $this->withAuthorizationHeaderByUser($user)->json("POST",'/api/users/1', $expected);
         $response->assertStatus(200);
     }
 
@@ -51,8 +81,8 @@ class Users extends TestCase
      */
     public function test_create()
     {
-        $response = $this->post('/api/users');
-
+        $expected = User::factory()->definition();
+        $response = $this->json("POST",'/api/users/1', $expected);
         $response->assertStatus(200);
     }
 }
